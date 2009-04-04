@@ -1,37 +1,59 @@
 #ifndef __CPPMKL_MATRIX_H__
 #define __CPPMKL_MATRIX_H__
 #include <assert.h>
+#include <stddef.h>
 #include <mkl.h>
 
 namespace cppmkl
 {
   class matrix
   {
-    double* data;
-    unsigned int row_count;
-    unsigned int col_count;
+    double* d;
+    size_t s1;
+    size_t s2;
     public:
     matrix()
     {
     }
-    matrix(unsigned int r, unsigned int c):row_count(r), col_count(c)
+    matrix(size_t r, size_t c):s1(r), s2(c)
     {
-      data = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
-      if(data == 0)
+      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      if(d == 0)
       {
         throw std::bad_alloc();
       }
+      for(size_t i=0;i<r*c;++i) d[i]=0.0;
     }
-    ~matrix() //non virtual, don't inherit from matrix
+    matrix(const double* _d, size_t r, size_t c): s1(r), s2(c)
     {
-      MKL_free(data);
+      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      if(d == 0)
+      {
+        throw std::bad_alloc();
+      }
+      for(size_t i=0;i<r*c;++i) d[i]=_d[i];
     }
-    double& operator()(unsigned int row, unsigned int col)
+    ~matrix() //non virtual, don't inherit from 
     {
-      assert(row<row_count);
-      assert(col<col_count);
-      return data[row*col_count+col];
+      MKL_free(d);
     }
+    double& operator()(size_t row, size_t col)
+    {
+      assert(row<s1);
+      assert(col<s2);
+      return d[row*s2+col];
+    }
+    const double& operator()(size_t row, size_t col) const
+    {
+      assert(row<s1);
+      assert(col<s2);
+      return d[row*s2+col];
+    }
+    double* data() { return d; }
+    const double* data() const { return d; }
+    size_t size1() const { return s1; }
+    size_t size2() const { return s2; }
+  
   };
 }
 
