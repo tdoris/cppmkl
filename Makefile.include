@@ -1,0 +1,32 @@
+
+MKL_ROOT=/opt/intel/mkl/10.1.1.019
+MKL_LIBDIR=$(MKL_ROOT)/lib/32
+MKL_LDFLAGS=-L$(MKL_LIBDIR) -lmkl_core -liomp5 -lguide -lpthread 
+
+SOURCES=$(wildcard *.cpp)
+OBJECTS=$(patsubst %.cpp,%.o,$(SOURCES))
+DEPENDS=$(patsubst %.cpp,%.d,$(SOURCES))
+INCLUDES=-I$(MKL_ROOT)
+
+CXXFLAGS=$(INCLUDES) -Wall -g -MMD
+CXX=$(CCACHE) g++
+LD=g++
+LDFLAGS+=$(MKL_LDFLAGS) -lm
+
+.PHONY: $(SUBDIRS)
+
+all: $(SUBDIRS) $(BINARY_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@
+
+$(BINARY_NAME): $(OBJECTS)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARY_NAME)
+
+clean:
+	@for dir in $(SUBDIRS); do $(MAKE) -C $$dir clean; done
+	$(RM) $(OBJECTS) $(DEPENDS) $(BINARY_NAME)
+
+-include $(DEPENDS)
+
+
