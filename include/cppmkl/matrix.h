@@ -5,6 +5,8 @@
 #include <vector>
 #include <mkl.h>
 
+#include "cppmkl/cppmkl_allocator.h"
+
 namespace cppmkl
 {
   /**
@@ -16,7 +18,7 @@ namespace cppmkl
   template<typename T>  
   class matrix
   {
-    std::vector<T> d;
+    std::vector<T, cppmkl::cppmkl_allocator<T> > d;
     size_t s1;
     size_t s2;
     public:
@@ -27,8 +29,10 @@ namespace cppmkl
     {
       d.resize(r*c);
     }
-    matrix(const std::vector<T> _d, size_t r, size_t c):d(_d), s1(r), s2(c)
+    matrix(const std::vector<T> _d, size_t r, size_t c):s1(r), s2(c)
     {
+      d.resize(r*c);
+      for(size_t i=0;i<d.size();++i) { d[i] = _d[i];}
     }
     // creates new matrix of specified size
     void resize(size_t r, size_t c)
