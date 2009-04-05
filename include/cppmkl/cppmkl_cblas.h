@@ -65,13 +65,18 @@ namespace cppmkl
       CBLAS_ORDER order = CblasRowMajor;
       bool doTransA = TransA != CblasNoTrans;
       bool doTransB = TransB != CblasNoTrans;
-      const MKL_INT M = doTransA == false ? A.size1() : A.size2();//rows of op(A)
-      const MKL_INT N = doTransB == false ? B.size2() : B.size1();//cols of op(B) 
-      const MKL_INT K = doTransA == false ? A.size2() : A.size1();//cols of op(A)
-      const MKL_INT lda = doTransA == false ? K : M;
-      const MKL_INT ldb = doTransB == false ? N : K;
-      const MKL_INT ldc = N; 
-      cblas_gemm(order, TransA, TransB, M, N, K, alpha, A.data(), lda, B.data(), ldb, beta, C.data(), ldc);     
+      const size_t opA_row_count = doTransA == false ? A.size1() : A.size2();//rows of op(A)
+      const size_t opB_col_count = doTransB == false ? B.size2() : B.size1();//cols of op(B) 
+      const size_t opA_col_count = doTransA == false ? A.size2() : A.size1();//cols of op(A)
+      const size_t opB_row_count = doTransB == false ? B.size1() : B.size2(); //rows of op(B)
+      const MKL_INT lda = doTransA == false ? opA_col_count : opA_row_count;
+      const MKL_INT ldb = doTransB == false ? opB_col_count : opA_col_count;
+      const MKL_INT ldc = opB_col_count; 
+      assert(opA_col_count == opB_row_count);
+      assert(C.size1() == opA_row_count);
+      assert(C.size2() == opB_col_count);
+      // call the appropriate overloaded cblas_gemm function based on the type of X.data()
+      cblas_gemm(order, TransA, TransB, opA_row_count, opB_col_count, opA_col_count, alpha, A.data(), lda, B.data(), ldb, beta, C.data(), ldc);     
     }
 
 }

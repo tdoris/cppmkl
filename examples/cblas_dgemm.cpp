@@ -25,31 +25,28 @@ int main(int argv, char** argc)
   string file1, file2;
   CBLAS_TRANSPOSE transa=CblasNoTrans, transb=CblasNoTrans;
   double alpha=1.0, beta=0.0;
-  
+
   parsearguments(argv, argc, file1, file2, transa, transb, alpha, beta);
 
   {
-    
+
     vector<double> data1, data2;
     size_t r, c;
     if(!load(file1, data1, r,c)) return 1;
-    cppmkl::matrix<double> A(&data1[0],r,c);
+    cppmkl::matrix<double> A(data1,r,c);
 
     if(!load(file2, data2, r,c)) return 1;
-    {
-    cppmkl::matrix<double> B(&data2[0],r,c);
 
-    {
-    cppmkl::matrix<double> C(A.size1(),B.size2());
+    cppmkl::matrix<double> B(data2,r,c);
+
+    size_t c_rows = transa == CblasNoTrans ? A.size1() : A.size2();
+    size_t c_cols = transb == CblasNoTrans ? B.size2() : B.size1();
+    cppmkl::matrix<double> C(c_rows, c_cols);
 
     cppmkl::cblas_gemm(A, B, C, transa, transb, alpha, beta);
-  
+
     cout << "C:\n";
     print_matrix(C); 
-    }
-    cout << "B:\n";
-    print_matrix(B); 
-    }   
   } 
     
   return 0; 

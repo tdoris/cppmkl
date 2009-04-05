@@ -14,16 +14,4 @@ void matrix_construction()
   {    
     matrix<double> m(10,10);
   }
-  {
-    //should cause bad alloc
-    bool bad_alloc_thrown = false;
-    try
-    {
-      matrix<double> m(1024*1024*1024, 1024*1024*1024);
-    } catch(bad_alloc& ba)
-    {
-      bad_alloc_thrown = true;
-    }
-    assert(bad_alloc_thrown);
-  }
 }
