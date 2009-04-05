@@ -11,7 +11,7 @@ using namespace std;
 char* progname;
 int main(int argv, char** argc)
 {
-  void print_matrix(const cppmkl::matrix& m);
+  void print_matrix(const cppmkl::matrix<double>& m);
   void usage();
   bool load(const string& filename, vector<double>& d, size_t& rows, size_t& cols);
   void parsearguments(int argv, char* argc[], string& file1, string& file2, CBLAS_TRANSPOSE& transa, CBLAS_TRANSPOSE& transb, double& alhpa, double& beta);
@@ -33,17 +33,23 @@ int main(int argv, char** argc)
     vector<double> data1, data2;
     size_t r, c;
     if(!load(file1, data1, r,c)) return 1;
-    cppmkl::matrix A(&data1[0],r,c);
+    cppmkl::matrix<double> A(&data1[0],r,c);
 
     if(!load(file2, data2, r,c)) return 1;
-    cppmkl::matrix B(&data2[0],r,c);
+    {
+    cppmkl::matrix<double> B(&data2[0],r,c);
 
-    cppmkl::matrix C(A.size1(),B.size2());
+    {
+    cppmkl::matrix<double> C(A.size1(),B.size2());
 
-    cppmkl::cblas_dgemm(A, B, C, (CBLAS_TRANSPOSE) transa,(CBLAS_TRANSPOSE ) transb, alpha, beta);
+    cppmkl::cblas_gemm(A, B, C, transa, transb, alpha, beta);
   
     cout << "C:\n";
-    print_matrix(C);    
+    print_matrix(C); 
+    }
+    cout << "B:\n";
+    print_matrix(B); 
+    }   
   } 
     
   return 0; 
@@ -83,7 +89,7 @@ void parsearguments(int argv, char** argc, string& file1, string& file2, CBLAS_T
   }
 }
 
-void print_matrix(const cppmkl::matrix& m)
+void print_matrix(const cppmkl::matrix<double>& m)
 {
   for(size_t r=0;r<m.size1();++r)
   {

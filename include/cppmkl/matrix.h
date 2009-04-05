@@ -6,27 +6,30 @@
 
 namespace cppmkl
 {
+  template<typename T>  
   class matrix
   {
-    double* d;
+    T* d;
     size_t s1;
     size_t s2;
+    matrix(const matrix<T>& rhs);
+    matrix<T>& operator=(const matrix<T>& rhs);
     public:
     matrix(): d(0), s1(0), s2(0)
     {
     }
     matrix(size_t r, size_t c):s1(r), s2(c)
     {
-      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      d = static_cast<T*>(MKL_malloc(r*c*sizeof(T), 128));
       if(d == 0)
       {
         throw std::bad_alloc();
       }
       for(size_t i=0;i<r*c;++i) d[i]=0.0;
     }
-    matrix(const double* _d, size_t r, size_t c): s1(r), s2(c)
+    matrix(const T* _d, size_t r, size_t c): s1(r), s2(c)
     {
-      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      d = static_cast<T*>(MKL_malloc(r*c*sizeof(T), 128));
       if(d == 0)
       {
         throw std::bad_alloc();
@@ -47,7 +50,7 @@ namespace cppmkl
       {
         MKL_free(d);
       }
-      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      d = static_cast<T*>(MKL_malloc(r*c*sizeof(T), 128));
       if(d == 0) 
       { 
         throw std::bad_alloc();
@@ -56,20 +59,20 @@ namespace cppmkl
       s1 = r;
       s2 = c;
     }
-    double& operator()(size_t row, size_t col)
+    T& operator()(size_t row, size_t col)
     {
       assert(row<s1);
       assert(col<s2);
       return d[row*s2+col];
     }
-    const double& operator()(size_t row, size_t col) const
+    const T& operator()(size_t row, size_t col) const
     {
       assert(row<s1);
       assert(col<s2);
       return d[row*s2+col];
     }
-    double* data() { return d; }
-    const double* data() const { return d; }
+    T* data() { return d; }
+    const T* data() const { return d; }
     size_t size1() const { return s1; }
     size_t size2() const { return s2; }
   

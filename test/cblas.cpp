@@ -2,7 +2,7 @@
 #include <iostream>
 #include "cppmkl/cppmkl_cblas.h"
 using namespace std;
-void print_matrix(const cppmkl::matrix& m)
+void print_matrix(const cppmkl::matrix<double>& m)
 {
   for(size_t r=0;r<m.size1();++r)
   {
@@ -18,9 +18,9 @@ void test_cblas_dgemm()
   cout << __FUNCTION__ <<endl;
   {
     cout <<"test 1"<<endl;
-    cppmkl::matrix A(3,3);
-    cppmkl::matrix B(3,3);
-    cppmkl::matrix C(3,3);
+    cppmkl::matrix<double> A(3,3);
+    cppmkl::matrix<double> B(3,3);
+    cppmkl::matrix<double> C(3,3);
     A(0,0) = 1.0;
     A(1,1) = 1.0;
     A(2,2) = 1.0;
@@ -33,7 +33,7 @@ void test_cblas_dgemm()
     B(2,0) = 3.0;
     B(2,1) = 3.1;
     B(2,2) = 3.2;
-    cppmkl::cblas_dgemm(A, B, C);
+    cppmkl::cblas_gemm(A, B, C);
     assert(C(0,0) == 1.0);
     assert(C(0,1) == 1.1);
     assert(C(0,2) == 1.2);
@@ -46,9 +46,9 @@ void test_cblas_dgemm()
   }
   {
     cout <<"test 2"<<endl;
-    cppmkl::matrix A(2,3);
-    cppmkl::matrix B(3,2);
-    cppmkl::matrix C(2,2);
+    cppmkl::matrix<double> A(2,3);
+    cppmkl::matrix<double> B(3,2);
+    cppmkl::matrix<double> C(2,2);
     A(0,0) = 1.0;
     A(0,1) = 0.0;
     A(0,2) = 2.0;
@@ -61,7 +61,7 @@ void test_cblas_dgemm()
     B(1,1) = 1.0;
     B(2,0) = 1.0;
     B(2,1) = 0.0;
-    cppmkl::cblas_dgemm(A, B, C);
+    cppmkl::cblas_gemm(A, B, C);
     assert(C(0,0) == 5.0);
     assert(C(0,1) == 1.0);
     assert(C(1,0) == 4.0);
