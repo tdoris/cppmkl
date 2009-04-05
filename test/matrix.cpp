@@ -8,6 +8,9 @@ using namespace cppmkl;
 void matrix_construction()
 {
   cout << __FUNCTION__ <<endl;  
+  {
+    matrix m;
+  }
   {    
     matrix m(10,10);
   }

@@ -12,7 +12,7 @@ namespace cppmkl
     size_t s1;
     size_t s2;
     public:
-    matrix()
+    matrix(): d(0), s1(0), s2(0)
     {
     }
     matrix(size_t r, size_t c):s1(r), s2(c)
@@ -35,7 +35,26 @@ namespace cppmkl
     }
     ~matrix() //non virtual, don't inherit from 
     {
-      MKL_free(d);
+      if(d)
+      {
+        MKL_free(d);
+      }
+    }
+    // creates new matrix of specified size
+    void resize(size_t r, size_t c)
+    {
+      if(d)
+      {
+        MKL_free(d);
+      }
+      d = static_cast<double*>(MKL_malloc(r*c*sizeof(double), 128));
+      if(d == 0) 
+      { 
+        throw std::bad_alloc();
+      }
+      for(size_t i=0;i<r*c;++i) d[i]=0.0;
+      s1 = r;
+      s2 = c;
     }
     double& operator()(size_t row, size_t col)
     {

@@ -10,8 +10,8 @@ INCLUDES+=-I$(MKL_ROOT)/include
 
 CXX=$(CCACHE) g++
 LD=g++
-CXXFLAGS+=$(INCLUDES) -Wall -g -MMD
-LDFLAGS+=$(MKL_LDFLAGS) -lm
+CXXFLAGS+=$(INCLUDES) -fPIC -Wall -g -MMD
+LDFLAGS+=$(MKL_LDFLAGS) 
 
 .PHONY: $(SUBDIRS)
 
@@ -25,7 +25,8 @@ $(BINARY_NAME): $(OBJECTS)
 
 clean:
 	@for dir in $(SUBDIRS); do $(MAKE) -C $$dir clean; done
-	$(RM) $(OBJECTS) $(DEPENDS) $(BINARY_NAME)
+	$(RM) $(OBJECTS) $(DEPENDS) $(BINARY_NAME) $(CLEANUP)
+
 
 -include $(DEPENDS)
 
