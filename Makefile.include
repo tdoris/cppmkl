@@ -1,7 +1,7 @@
 
 MKL_ROOT=/opt/intel/mkl/10.1.1.019
 MKL_LIBDIR=$(MKL_ROOT)/lib/32
-MKL_LDFLAGS=-L$(MKL_LIBDIR) -lmkl_intel -lmkl_solver -lmkl_lapack -lmkl_ia32 -lmkl_core -liomp5 -lguide -lpthread -lm
+MKL_LDFLAGS=-L$(MKL_LIBDIR) -lmkl_intel -lmkl_solver -lmkl_lapack -lmkl -lmkl_core -liomp5 -lguide -lpthread -lm
 
 SOURCES=$(wildcard *.cpp)
 OBJECTS=$(patsubst %.cpp,%.o,$(SOURCES))

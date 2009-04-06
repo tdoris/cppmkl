@@ -7,13 +7,36 @@
 namespace cppmkl
 {
 
+  inline float cblas_asum(const MKL_INT N, const float *X, const MKL_INT incX)
+  {
+      return cblas_sasum(N, X, incX);
+  }
+  inline float cblas_asum(const MKL_INT N, const MKL_Complex8 *X, const MKL_INT incX)
+  {
+    return cblas_scasum(N, static_cast<const void*>(X), incX);
+  }
+  inline double cblas_asum(const MKL_INT N, const double *X, const MKL_INT incX)
+  { 
+    return cblas_dasum(N, X, incX);
+  }
+  inline double cblas_asum(const MKL_INT N, const MKL_Complex16 *X, const MKL_INT incX)
+  {
+    return cblas_dzasum(N, static_cast<const void*>(X), incX);
+  }
+
+  //always return a double, auto conversion to float in calling code
+  template <typename VECTOR_T>
+  double cblas_asum(const VECTOR_T& v)
+  {
+    return cblas_asum(v.size(), v.data(), 1);
+  }
   /** cppmkl wrapper for cblas_dgemm, BLAS level 3 matrix multiplication
    * MATRIX_T can be any row-major matrix type that has functions size1(), size2() 
    * giving row count and column count respectively and data()
    * which returns a pointer to the first data element
    */
 
-  void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
+  inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
                  const MKL_INT K, const double alpha, const double *A,
                  const MKL_INT lda, const double *B, const MKL_INT ldb,
@@ -22,7 +45,7 @@ namespace cppmkl
     cblas_dgemm(Order, TransA, TransB, M, N,K, alpha, A, lda, B, ldb,
                 beta, C, ldc);
   }
-  void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
+  inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
                  const MKL_INT K, const float alpha, const float *A,
                  const MKL_INT lda, const float *B, const MKL_INT ldb,
@@ -31,7 +54,7 @@ namespace cppmkl
     cblas_sgemm(Order, TransA, TransB, M, N,K, alpha, A, lda, B, ldb,
                 beta, C, ldc);
   }
-  void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
+  inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
                  const MKL_INT K, const MKL_Complex8 alpha, const MKL_Complex8 *A,
                  const MKL_INT lda, const MKL_Complex8 *B, const MKL_INT ldb,
@@ -44,7 +67,7 @@ namespace cppmkl
         static_cast<const void*>(&beta), 
         static_cast<void*>(C), ldc);
   }
-  void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
+  inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
                  const MKL_INT K, const MKL_Complex16 alpha, const MKL_Complex16 *A,
                  const MKL_INT lda, const MKL_Complex16 *B, const MKL_INT ldb,
@@ -58,7 +81,7 @@ namespace cppmkl
         static_cast<void*>(C), ldc);
   }
   template <typename MATRIX_T>
-    void cblas_gemm(const MATRIX_T& A, const MATRIX_T& B, MATRIX_T& C,
+    inline void cblas_gemm(const MATRIX_T& A, const MATRIX_T& B, MATRIX_T& C,
         const CBLAS_TRANSPOSE TransA=CblasNoTrans, const CBLAS_TRANSPOSE TransB=CblasNoTrans,
         const double alpha=1.0, const double beta=0.0)
     {

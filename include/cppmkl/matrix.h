@@ -11,9 +11,12 @@ namespace cppmkl
 {
   /**
  * example of a matrix type that can be used with cppmkl wrapper functions
- * for simplicity this just uses a std::vector for underlying storage, a
- * performance/accuracy conscious implementation would manually manage the 
- * underlying storage using MKL_malloc and MKL_free and properly align the storage
+ * the std::vector used for underlying storage uses the cppmkl allocator
+ * so storage should be properly aligned; using vector here alleviates us 
+ * from any storage management complexity, which is nice.
+ * This matrix can double up as a column or row vector, just set the other
+ * dimension size to 1, i.e. you can pass it to wrapped functions expecting
+ * a conformant vector type as it has data() and size().
  */
   template<typename T>  
   class matrix
@@ -57,7 +60,7 @@ namespace cppmkl
     const T* data() const { return &d[0]; }
     size_t size1() const { return s1; }
     size_t size2() const { return s2; }
-  
+    size_t size() const { return s1*s2; } 
   };
 }
 
