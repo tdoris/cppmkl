@@ -6,12 +6,46 @@ using namespace std;
 
 void test_asum()
 {
-  cppmkl::matrix<double> A(10,1);
-  for(size_t i=0;i<10;++i)
+  cout << __FUNCTION__ <<endl;
   {
-    A(i,0) = i*1.0;
+    cppmkl::matrix<double> A(10,1);
+    for(size_t i=0;i<10;++i)
+    {
+      A(i,0) = i*1.0;
+    }
+    double sum = cppmkl::cblas_asum(A);
+    assert(sum == 45);
   }
-  double sum = cppmkl::cblas_asum(A);
-  assert(sum == 45);
+  
+  {
+    cppmkl::matrix<float> A(10,1);
+    for(size_t i=0;i<10;++i)
+    {
+      A(i,0) = i*1.0;
+    }
+    double sum = cppmkl::cblas_asum(A);
+    assert(sum == 45);
+  }
+  
+  {
+    cppmkl::matrix<MKL_Complex8> A(10,1);
+    for(size_t i=0;i<10;++i)
+    {
+      A(i,0).real = i*1.0;
+      A(i,0).imag = i*2.0;
+    }
+    double sum = cppmkl::cblas_asum(A);
+    assert(sum == 135);
+  }
+  {
+    cppmkl::matrix<MKL_Complex16> A(10,1);
+    for(size_t i=0;i<10;++i)
+    {
+      A(i,0).real = i*1.0;
+      A(i,0).imag = i*2.0;
+    }
+    double sum = cppmkl::cblas_asum(A);
+    assert(sum == 135);
+  }
 }
 

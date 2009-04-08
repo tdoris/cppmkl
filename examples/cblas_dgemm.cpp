@@ -6,6 +6,7 @@
 
 
 #include "cppmkl/cppmkl_cblas.h"
+#include "cppmkl/matrix.h"
 
 using namespace std;
 char* progname;

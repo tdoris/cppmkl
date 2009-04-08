@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <iostream>
 #include "cppmkl/cppmkl_cblas.h"
+#include "cppmkl/matrix.h"
 using namespace std;
 void print_matrix(const cppmkl::matrix<double>& m)
 {
