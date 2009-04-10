@@ -18,6 +18,9 @@ void test_scal();
 void test_swap();
 void test_iamax();
 void test_iamin();
+void test_dcabs1();
+void test_gemv();
+void test_gemm();
 int main()
 {
   matrix_construction();
@@ -38,5 +41,8 @@ int main()
   test_swap();
   test_iamax();
   test_iamin();
+  test_dcabs1();
+  test_gemv();
+  test_gemm();
   return 0;
 }

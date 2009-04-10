@@ -25,6 +25,7 @@ namespace cppmkl
     size_t s1;
     size_t s2;
     public:
+    typedef T value_type;
     matrix(): s1(0), s2(0)
     {
     }

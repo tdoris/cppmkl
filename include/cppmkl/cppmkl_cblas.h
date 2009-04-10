@@ -9,13 +9,53 @@ namespace cppmkl
  * Template function wrappers for BLAS routines.
  * Vector types must have a size() function and data() function. The
  * data() function must return a pointer to the first data element.
- * Matrix types must have size1(), size2() and data() functions. 
+ * Matrix types must have size1(), size2() and data() functions, and value_type typedef. 
  * size1() returns the number of rows, size2() the number of columns
  * and data() returns a pointer to the first data element.
  *
  * The template functions here assume all Matrix types are row major. 
  * This can be generalised by adding type traits.
  */
+  // in order to default alpha and beta we need something that works for 
+  // both real and complex, this can (hopefully) be made much simpler:
+  template<typename T>
+   inline T _alpha_default()
+    {
+      return T();
+    }
+  template<>
+   inline double _alpha_default<double>()
+    {
+      return 1.0;
+    }
+  template<>
+   inline float _alpha_default<float>()
+    {
+      return 1.0;
+    }
+  template<>
+    inline MKL_Complex8 _alpha_default<MKL_Complex8>()
+    {
+      static MKL_Complex8 c;
+      c.real = 1.0;
+      c.imag = 0.0;
+      return c;
+
+    }
+  template<>
+    inline MKL_Complex16 _alpha_default<MKL_Complex16>()
+    {
+      static MKL_Complex16 c;
+      c.real = 1.0;
+      c.imag = 0.0;
+      return c;
+
+    }
+  template<typename T>
+    inline T _beta_default()
+    {
+      return T();
+    }
   inline float cblas_asum(const MKL_INT N, const float *X, const MKL_INT incX)
   {
       return cblas_sasum(N, X, incX);
@@ -363,12 +403,77 @@ namespace cppmkl
   {
     return cblas_iamin(x.size()/incX, x.data(), incX);
   } 
+
+  inline double cblas_cabs1(const MKL_Complex16& z)
+  {
+    return cblas_dcabs1(static_cast<const void*>(&z));
+  }
+
+  /**
+ * CBLAS BLAS Level 2 wrappers
+ */
+ 
+  //gemv Matrix vector product
+  inline void cblas_gemv(const  CBLAS_ORDER order,
+                 const  CBLAS_TRANSPOSE TransA, const MKL_INT M, const MKL_INT N,
+                 const double alpha, const float *A, const MKL_INT lda,
+                 const float *X, const MKL_INT incX, const double beta,
+                 float *Y, const MKL_INT incY)
+  {
+    cblas_sgemv(order, TransA, M, N, alpha, A, lda, X, incX, beta, Y, incY);
+  }
+  inline void cblas_gemv(const  CBLAS_ORDER order,
+                 const  CBLAS_TRANSPOSE TransA, const MKL_INT M, const MKL_INT N,
+                 const double alpha, const double *A, const MKL_INT lda,
+                 const double *X, const MKL_INT incX, const double beta,
+                 double *Y, const MKL_INT incY)
+  {
+    cblas_dgemv(order, TransA, M, N, alpha, A, lda, X, incX, beta, Y, incY);
+  }
+  inline void cblas_gemv(const  CBLAS_ORDER order,
+                 const  CBLAS_TRANSPOSE TransA, const MKL_INT M, const MKL_INT N,
+                 const MKL_Complex8& alpha, const MKL_Complex8 *A, const MKL_INT lda,
+                 const MKL_Complex8 *X, const MKL_INT incX, const MKL_Complex8& beta,
+                 MKL_Complex8 *Y, const MKL_INT incY)
+  {
+    cblas_cgemv(order, TransA, M, N, static_cast<const void*>(&alpha), static_cast<const void*>(A), lda, 
+                static_cast<const void*>(X), incX, static_cast<const void*>(&beta), static_cast<void*>(Y), incY);
+  }
+  inline void cblas_gemv(const  CBLAS_ORDER order,
+                 const  CBLAS_TRANSPOSE TransA, const MKL_INT M, const MKL_INT N,
+                 const MKL_Complex16& alpha, const MKL_Complex16 *A, const MKL_INT lda,
+                 const MKL_Complex16 *X, const MKL_INT incX, const MKL_Complex16& beta,
+                 MKL_Complex16 *Y, const MKL_INT incY)
+  {
+    cblas_zgemv(order, TransA, M, N, static_cast<const void*>(&alpha), static_cast<const void*>(A), lda, 
+                static_cast<const void*>(X), incX, static_cast<const void*>(&beta), static_cast<void*>(Y), incY);
+  }
+  
+  template<typename MATRIX_T, typename VECTOR_T, typename SCALAR_T>
+  inline void cblas_gemv(const MATRIX_T& A, const VECTOR_T& x, VECTOR_T& y,
+                   const SCALAR_T& alpha, 
+                   const SCALAR_T& beta, 
+                   const CBLAS_TRANSPOSE TransA=CblasNoTrans,
+                   const MKL_INT incX=1, const MKL_INT incY=1)
+  {
+    CBLAS_ORDER order = CblasRowMajor;
+    bool doTransA = TransA != CblasNoTrans;
+    const size_t opA_row_count = doTransA == false ? A.size1() : A.size2();//rows of op(A)
+    const size_t opA_col_count = doTransA == false ? A.size2() : A.size1();//cols of op(A)
+    const MKL_INT M = A.size1();
+    const MKL_INT N = A.size2();
+    const MKL_INT lda = doTransA == false ? opA_col_count : opA_row_count;
+    cblas_gemv(order, TransA, M, N, alpha, A.data(), lda, x.data(), incX, beta, y.data(), incY); 
+  }
+  //ger rank 1 update of a general matrix
+  //gerc rank 1 update of a conjugated general matrix
+
+
   /** cppmkl wrapper for cblas_dgemm, BLAS level 3 matrix multiplication
    * MATRIX_T can be any row-major matrix type that has functions size1(), size2() 
    * giving row count and column count respectively and data()
    * which returns a pointer to the first data element
    */
-
   inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
                  const MKL_INT K, const double alpha, const double *A,
@@ -416,7 +521,8 @@ namespace cppmkl
   template <typename MATRIX_T>
     inline void cblas_gemm(const MATRIX_T& A, const MATRIX_T& B, MATRIX_T& C,
         const CBLAS_TRANSPOSE TransA=CblasNoTrans, const CBLAS_TRANSPOSE TransB=CblasNoTrans,
-        const double alpha=1.0, const double beta=0.0)
+        const typename MATRIX_T::value_type alpha=_alpha_default<typename MATRIX_T::value_type>(), 
+        const typename MATRIX_T::value_type beta=_beta_default<typename MATRIX_T::value_type>())
     {
       CBLAS_ORDER order = CblasRowMajor;
       bool doTransA = TransA != CblasNoTrans;
