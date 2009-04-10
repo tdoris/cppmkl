@@ -1,6 +1,8 @@
 #ifndef __CPPMKL_ALLOCATOR_H__
 #define __CPPMKL_ALLOCATOR_H__
 
+#include <new>
+#include <cstddef>
 #include <mkl.h>
 
 namespace cppmkl
