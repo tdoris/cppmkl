@@ -6,7 +6,8 @@
 #include <cmath>
 
 #include <boost/numeric/ublas/matrix.hpp>
-#include "cppmkl/cppmkl_boostw.h"
+#include "cppmkl/cppmkl_boostw.h" // this must be included here
+
 #include "cppmkl/cppmkl_cblas.h"
 #include "cppmkl/matrix.h"
 
@@ -14,13 +15,26 @@
 
 using namespace std;
 
-int test_gemm()
+void test_gemm_boost()
 {
   cout << __FUNCTION__ <<endl;
   {
-    cppmkl::matrix<float> A(2,2);
-    cppmkl::matrix<float> B(2,2);
-    cppmkl::matrix<float> C(2,2);
+    boost::numeric::ublas::matrix<float> A(2,2);
+    boost::numeric::ublas::matrix<float> B(2,2);
+    boost::numeric::ublas::matrix<float> C(2,2);
+    initm(A, "1.2 2.3; 3.4 4.5");
+    initm(B, "1.2 2.3; 3.4 4.5");
+    cppmkl::cblas_gemm(A, B, C);
+    assert(fabs(C(0,0) - 9.26 ) < 0.0001);   
+    assert(fabs(C(0,1) - 13.11 ) < 0.0001);   
+    assert(fabs(C(1,0) - 19.38 ) < 0.0001);   
+    assert(fabs(C(1,1) - 28.07 ) < 0.0001);   
+  }
+
+  {
+    boost::numeric::ublas::matrix<double> A(2,2);
+    boost::numeric::ublas::matrix<double> B(2,2);
+    boost::numeric::ublas::matrix<double> C(2,2);
     initm(A, "1.2 2.3; 3.4 4.5");
     initm(B, "1.2 2.3; 3.4 4.5");
     cppmkl::cblas_gemm(A, B, C);
@@ -30,21 +44,9 @@ int test_gemm()
     assert(fabs(C(1,1) - 28.07 ) < 0.0001);   
   }
   {
-    cppmkl::matrix<double> A(2,2);
-    cppmkl::matrix<double> B(2,2);
-    cppmkl::matrix<double> C(2,2);
-    initm(A, "1.2 2.3; 3.4 4.5");
-    initm(B, "1.2 2.3; 3.4 4.5");
-    cppmkl::cblas_gemm(A, B, C);
-    assert(fabs(C(0,0) - 9.26 ) < 0.0001);   
-    assert(fabs(C(0,1) - 13.11 ) < 0.0001);   
-    assert(fabs(C(1,0) - 19.38 ) < 0.0001);   
-    assert(fabs(C(1,1) - 28.07 ) < 0.0001);   
-  }
-  {
-    cppmkl::matrix<MKL_Complex8> A(2,2);
-    cppmkl::matrix<MKL_Complex8> B(2,2);
-    cppmkl::matrix<MKL_Complex8> C(2,2);
+    boost::numeric::ublas::matrix<MKL_Complex8> A(2,2);
+    boost::numeric::ublas::matrix<MKL_Complex8> B(2,2);
+    boost::numeric::ublas::matrix<MKL_Complex8> C(2,2);
     initcm(A, true, "1.2 2.3; 3.4 4.5");
     initcm(A, false, "1.2 2.3; 3.4 4.5");
     initcm(B, true, "1.2 2.3; 3.4 4.5");
@@ -59,5 +61,4 @@ int test_gemm()
     assert(fabs(C(1,0).imag - 38.76 ) < 0.0001);   
     assert(fabs(C(1,1).imag - 56.14 ) < 0.0001);   
   }
-  return 0; 
 }
