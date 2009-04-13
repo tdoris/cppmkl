@@ -63,6 +63,18 @@ namespace cppmkl
     size_t size2() const { return s2; }
     size_t size() const { return s1*s2; } 
   };
+  template<typename T>
+  inline const T* ptr_to_first(const cppmkl::matrix<T>& m)
+  {
+    const T* ptr = m.data();
+    return ptr;
+  }
+  template<typename T>
+  inline T* ptr_to_first(cppmkl::matrix<T>& m)
+  {
+    T* ptr = m.data();
+    return ptr;
+  }
 }
 
 #endif

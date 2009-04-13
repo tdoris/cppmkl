@@ -3,6 +3,7 @@
 #define __CPPMKL_VML_H__
 #include <assert.h>
 #include <mkl_vml.h>
+#include "cppmkl/cppmkl_type_utils.h"
 
 namespace cppmkl
 {
@@ -25,7 +26,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vadd(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vadd(a.size(), a.data(), b.data(), r.data());  
+    vadd(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vsub(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -46,7 +47,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vsub(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vsub(a.size(), a.data(), b.data(), r.data());  
+    vsub(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vsqr(const MKL_INT n, const float* a, float* r)
   {
@@ -59,7 +60,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vsqr(const VECTOR_T& a, VECTOR_T& r)
   {
-    vsqr(a.size(), a.data(), r.data());  
+    vsqr(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vmul(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -80,7 +81,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vmul(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vmul(a.size(), a.data(), b.data(), r.data());  
+    vmul(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vmulbyconj(const MKL_INT n, const MKL_Complex8* a, const MKL_Complex8* b, MKL_Complex8* r)
   {
@@ -93,7 +94,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vmulbyconj(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vmulbyconj(a.size(), a.data(), b.data(), r.data());  
+    vmulbyconj(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vconj(const MKL_INT n, const MKL_Complex8* a, MKL_Complex8* r)
   {
@@ -106,7 +107,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void vconj(const VECTOR_T& a, VECTOR_T& r)
   {
-    vconj(a.size(), a.data(), r.data());  
+    vconj(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
 inline void vabs(const MKL_INT n, const float* a, float* r)
   {
@@ -127,7 +128,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vabs(const VECTOR_T& a, VECTOR_T& r)
   {
-    vabs(a.size(), a.data(), r.data());  
+    vabs(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vinv(const MKL_INT n, const float* a, float* r)
   {
@@ -140,7 +141,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vinv(const VECTOR_T& a, VECTOR_T& r)
   {
-    vinv(a.size(), a.data(), r.data());  
+    vinv(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vdiv(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -161,7 +162,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vdiv(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vdiv(a.size(), a.data(), b.data(), r.data());  
+    vdiv(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vsqrt(const MKL_INT n, const float* a, float* r)
   {
@@ -182,7 +183,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vsqrt(const VECTOR_T& a, VECTOR_T& r)
   {
-    vsqrt(a.size(), a.data(), r.data());  
+    vsqrt(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vinvsqrt(const MKL_INT n, const float* a, float* r)
   {
@@ -195,7 +196,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vinvsqrt(const VECTOR_T& a, VECTOR_T& r)
   {
-    vinvsqrt(a.size(), a.data(), r.data());  
+    vinvsqrt(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vcbrt(const MKL_INT n, const float* a, float* r)
   {
@@ -208,7 +209,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vcbrt(const VECTOR_T& a, VECTOR_T& r)
   {
-    vcbrt(a.size(), a.data(), r.data());  
+    vcbrt(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vinvcbrt(const MKL_INT n, const float* a, float* r)
   {
@@ -221,7 +222,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vinvcbrt(const VECTOR_T& a, VECTOR_T& r)
   {
-    vinvcbrt(a.size(), a.data(), r.data());  
+    vinvcbrt(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vpow2o3(const MKL_INT n, const float* a, float* r)
   {
@@ -234,7 +235,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vpow2o3(const VECTOR_T& a, VECTOR_T& r)
   {
-    vpow2o3(a.size(), a.data(), r.data());  
+    vpow2o3(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vpow3o2(const MKL_INT n, const float* a, float* r)
   {
@@ -247,7 +248,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vpow3o2(const VECTOR_T& a, VECTOR_T& r)
   {
-    vpow3o2(a.size(), a.data(), r.data());  
+    vpow3o2(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vpow(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -268,7 +269,7 @@ inline void vabs(const MKL_INT n, const float* a, float* r)
   template <typename VECTOR_T>
   inline void vpow(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vpow(a.size(), a.data(), b.data(), r.data());  
+    vpow(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
 inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   {
@@ -289,7 +290,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename SCALAR_T, typename VECTOR_T>
   inline void vpowx(const VECTOR_T& a, const SCALAR_T& b, VECTOR_T& r)
   {
-    vpowx(a.size(), a.data(), b, r.data());  
+    vpowx(a.size(), ptr_to_first(a), b, ptr_to_first(r));  
   }
   inline void vhypot(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -302,7 +303,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vhypot(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vhypot(a.size(), a.data(), b.data(), r.data());  
+    vhypot(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vexp(const MKL_INT n, const float* a, float* r)
   {
@@ -323,7 +324,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vexp(const VECTOR_T& a, VECTOR_T& r)
   {
-    vexp(a.size(), a.data(), r.data());  
+    vexp(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vexpm1(const MKL_INT n, const float* a, float* r)
   {
@@ -336,7 +337,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vexpm1(const VECTOR_T& a, VECTOR_T& r)
   {
-    vexpm1(a.size(), a.data(), r.data());  
+    vexpm1(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vln(const MKL_INT n, const float* a, float* r)
   {
@@ -357,7 +358,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vln(const VECTOR_T& a, VECTOR_T& r)
   {
-    vln(a.size(), a.data(), r.data());  
+    vln(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vlog10(const MKL_INT n, const float* a, float* r)
   {
@@ -378,7 +379,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vlog10(const VECTOR_T& a, VECTOR_T& r)
   {
-    vlog10(a.size(), a.data(), r.data());  
+    vlog10(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vlog1p(const MKL_INT n, const float* a, float* r)
   {
@@ -391,7 +392,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vlog1p(const VECTOR_T& a, VECTOR_T& r)
   {
-    vlog1p(a.size(), a.data(), r.data());  
+    vlog1p(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vcos(const MKL_INT n, const float* a, float* r)
   {
@@ -412,7 +413,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vcos(const VECTOR_T& a, VECTOR_T& r)
   {
-    vcos(a.size(), a.data(), r.data());  
+    vcos(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vsin(const MKL_INT n, const float* a, float* r)
   {
@@ -433,7 +434,7 @@ inline void vpowx(const MKL_INT n, const float* a, const float b, float* r)
   template <typename VECTOR_T>
   inline void vsin(const VECTOR_T& a, VECTOR_T& r)
   {
-    vsin(a.size(), a.data(), r.data());  
+    vsin(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
 inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   {
@@ -446,7 +447,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vsincos(const VECTOR_T& a, VECTOR_T& y, VECTOR_T& z)
   {
-    vsincos(a.size(), a.data(), y.data(), z.data());  
+    vsincos(a.size(), ptr_to_first(a), ptr_to_first(y), ptr_to_first(z));  
   }
   inline void vCIS(const MKL_INT n, const float* a, MKL_Complex8* r)
   {
@@ -459,7 +460,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T_REAL, typename VECTOR_T_COMPLEX>
   inline void vCIS(const VECTOR_T_REAL& a, VECTOR_T_COMPLEX& r)
   {
-    vCIS(a.size(), a.data(), r.data());  
+    vCIS(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vtan(const MKL_INT n, const float* a, float* r)
   {
@@ -480,7 +481,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vtan(const VECTOR_T& a, VECTOR_T& r)
   {
-    vtan(a.size(), a.data(), r.data());  
+    vtan(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vacos(const MKL_INT n, const float* a, float* r)
   {
@@ -501,7 +502,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vacos(const VECTOR_T& a, VECTOR_T& r)
   {
-    vacos(a.size(), a.data(), r.data());  
+    vacos(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vasin(const MKL_INT n, const float* a, float* r)
   {
@@ -522,7 +523,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vasin(const VECTOR_T& a, VECTOR_T& r)
   {
-    vasin(a.size(), a.data(), r.data());  
+    vasin(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vatan(const MKL_INT n, const float* a, float* r)
   {
@@ -543,7 +544,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vatan(const VECTOR_T& a, VECTOR_T& r)
   {
-    vatan(a.size(), a.data(), r.data());  
+    vatan(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vatan2(const MKL_INT n, const float* a, const float* b, float* r)
   {
@@ -556,7 +557,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vatan2(const VECTOR_T& a, const VECTOR_T& b, VECTOR_T& r)
   {
-    vatan2(a.size(), a.data(), b.data(), r.data());  
+    vatan2(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  
   }
   inline void vcosh(const MKL_INT n, const float* a, float* r)
   {
@@ -577,7 +578,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vcosh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vcosh(a.size(), a.data(), r.data());  
+    vcosh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vsinh(const MKL_INT n, const float* a, float* r)
   {
@@ -598,7 +599,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vsinh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vsinh(a.size(), a.data(), r.data());  
+    vsinh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vtanh(const MKL_INT n, const float* a, float* r)
   {
@@ -619,7 +620,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vtanh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vtanh(a.size(), a.data(), r.data());  
+    vtanh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vacosh(const MKL_INT n, const float* a, float* r)
   {
@@ -640,7 +641,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vacosh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vacosh(a.size(), a.data(), r.data());  
+    vacosh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vasinh(const MKL_INT n, const float* a, float* r)
   {
@@ -661,7 +662,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vasinh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vasinh(a.size(), a.data(), r.data());  
+    vasinh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vatanh(const MKL_INT n, const float* a, float* r)
   {
@@ -682,7 +683,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vatanh(const VECTOR_T& a, VECTOR_T& r)
   {
-    vatanh(a.size(), a.data(), r.data());  
+    vatanh(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void verf(const MKL_INT n, const float* a, float* r)
   {
@@ -695,7 +696,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void verf(const VECTOR_T& a, VECTOR_T& r)
   {
-    verf(a.size(), a.data(), r.data());  
+    verf(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void verfc(const MKL_INT n, const float* a, float* r)
   {
@@ -708,7 +709,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void verfc(const VECTOR_T& a, VECTOR_T& r)
   {
-    verfc(a.size(), a.data(), r.data());  
+    verfc(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vcdfnorm(const MKL_INT n, const float* a, float* r)
   {
@@ -721,7 +722,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vcdfnorm(const VECTOR_T& a, VECTOR_T& r)
   {
-    vcdfnorm(a.size(), a.data(), r.data());  
+    vcdfnorm(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void verfinv(const MKL_INT n, const float* a, float* r)
   {
@@ -734,7 +735,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void verfinv(const VECTOR_T& a, VECTOR_T& r)
   {
-    verfinv(a.size(), a.data(), r.data());  
+    verfinv(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void verfcinv(const MKL_INT n, const float* a, float* r)
   {
@@ -747,7 +748,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void verfcinv(const VECTOR_T& a, VECTOR_T& r)
   {
-    verfcinv(a.size(), a.data(), r.data());  
+    verfcinv(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vcdfnorminv(const MKL_INT n, const float* a, float* r)
   {
@@ -760,7 +761,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vcdfnorminv(const VECTOR_T& a, VECTOR_T& r)
   {
-    vcdfnorminv(a.size(), a.data(), r.data());  
+    vcdfnorminv(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vfloor(const MKL_INT n, const float* a, float* r)
   {
@@ -773,7 +774,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vfloor(const VECTOR_T& a, VECTOR_T& r)
   {
-    vfloor(a.size(), a.data(), r.data());  
+    vfloor(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vceil(const MKL_INT n, const float* a, float* r)
   {
@@ -786,7 +787,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vceil(const VECTOR_T& a, VECTOR_T& r)
   {
-    vceil(a.size(), a.data(), r.data());  
+    vceil(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vtrunc(const MKL_INT n, const float* a, float* r)
   {
@@ -799,7 +800,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vtrunc(const VECTOR_T& a, VECTOR_T& r)
   {
-    vtrunc(a.size(), a.data(), r.data());  
+    vtrunc(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vround(const MKL_INT n, const float* a, float* r)
   {
@@ -812,7 +813,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vround(const VECTOR_T& a, VECTOR_T& r)
   {
-    vround(a.size(), a.data(), r.data());  
+    vround(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vnearbyint(const MKL_INT n, const float* a, float* r)
   {
@@ -825,7 +826,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vnearbyint(const VECTOR_T& a, VECTOR_T& r)
   {
-    vnearbyint(a.size(), a.data(), r.data());  
+    vnearbyint(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
   inline void vrint(const MKL_INT n, const float* a, float* r)
   {
@@ -838,7 +839,7 @@ inline void vsincos(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vrint(const VECTOR_T& a, VECTOR_T& r)
   {
-    vrint(a.size(), a.data(), r.data());  
+    vrint(a.size(), ptr_to_first(a), ptr_to_first(r));  
   }
 inline void vmodf(const MKL_INT n, const float* a, float* y, float* z)
   {
@@ -851,7 +852,7 @@ inline void vmodf(const MKL_INT n, const float* a, float* y, float* z)
   template <typename VECTOR_T>
   inline void vmodf(const VECTOR_T& a, VECTOR_T& y, VECTOR_T& z)
   {
-    vmodf(a.size(), a.data(), y.data(), z.data());  
+    vmodf(a.size(), ptr_to_first(a), ptr_to_first(y), ptr_to_first(z));  
   }
 }
 

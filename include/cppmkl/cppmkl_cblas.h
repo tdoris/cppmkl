@@ -2,16 +2,15 @@
 #define __CPPMKL_CBLAS_H__
 #include <assert.h>
 #include <mkl_cblas.h>
+#include "cppmkl/cppmkl_type_utils.h"
 
 namespace cppmkl
 {
   /**
  * Template function wrappers for BLAS routines.
- * Vector types must have a size() function and data() function. The
- * data() function must return a pointer to the first data element.
- * Matrix types must have size1(), size2() and data() functions, and value_type typedef. 
+ * Vector types must have a size() function. The
+ * Matrix types must have size1(), size2() functions, and value_type typedef. 
  * size1() returns the number of rows, size2() the number of columns
- * and data() returns a pointer to the first data element.
  *
  * The template functions here assume all Matrix types are row major. 
  * This can be generalised by adding type traits.
@@ -77,7 +76,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   double cblas_asum(const VECTOR_T& v, const MKL_INT incX=1)
   {
-    return cblas_asum(v.size()/incX, v.data(), incX);
+    return cblas_asum(v.size()/incX, ptr_to_first(v), incX);
   }
 
   inline void cblas_axpy(const MKL_INT N, const float alpha, const float *X,
@@ -106,7 +105,7 @@ namespace cppmkl
   inline void cblas_axpy(const VECTOR_T& x, VECTOR_T& y, double a=1.0, 
                          const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    cblas_axpy(x.size()/incX, a, x.data(), incX, y.data(), incY);
+    cblas_axpy(x.size()/incX, a, ptr_to_first(x), incX, ptr_to_first(y), incY);
   }
 
 
@@ -134,7 +133,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline void cblas_copy(const VECTOR_T& x, VECTOR_T& y, const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    cblas_copy(x.size()/incX, x.data(), incX, y.data(), incY);
+    cblas_copy(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY);
   }
 
   // dot product of vectors
@@ -152,7 +151,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline double cblas_dot(const VECTOR_T& x, VECTOR_T& y, const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    return cblas_dot(x.size()/incX, x.data(), incX, y.data(), incY);
+    return cblas_dot(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY);
   }
   
 
@@ -175,7 +174,7 @@ namespace cppmkl
   inline double cblas_sdot(const VECTOR_T& x, VECTOR_T& y, const double sb=0.0,
       const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    return cblas_sdot(x.size()/incX, x.data(), incX, y.data(), incY) + sb;
+    return cblas_sdot(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY) + sb;
   }
 
   // dot product of conjugate(x) and y, complex
@@ -196,7 +195,7 @@ namespace cppmkl
   inline void cblas_dotc(const VECTOR_T& x, const VECTOR_T& y, RESULT_T& result, 
     const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    return cblas_dotc(x.size()/incX, x.data(), incX, y.data(), incY, result);
+    return cblas_dotc(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY, result);
   }
   // dot product of x and y, complex
   inline void cblas_dotu(const MKL_INT N, const MKL_Complex8* X, const MKL_INT incX, 
@@ -216,7 +215,7 @@ namespace cppmkl
   inline void cblas_dotu(const VECTOR_T& x, const VECTOR_T& y, RESULT_T& result, 
     const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    return cblas_dotu(x.size()/incX, x.data(), incX, y.data(), incY, result);
+    return cblas_dotu(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY, result);
   }
 
   // vector 2-norm
@@ -239,7 +238,7 @@ namespace cppmkl
   template <typename VECTOR_T>
   inline double cblas_nrm2(const VECTOR_T& x, const MKL_INT incX=1)
   {
-    return cblas_nrm2(x.size() / incX, x.data(), incX);
+    return cblas_nrm2(x.size() / incX, ptr_to_first(x), incX);
   }
 
   // rot, rotate vectors
@@ -273,7 +272,7 @@ namespace cppmkl
   inline void cblas_rot(VECTOR_T& x, VECTOR_T& y, const double c, const double s,
                       const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    cblas_rot(x.size()/incX, x.data(), incX, y.data(), incY, c, s);
+    cblas_rot(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY, c, s);
   }
  
   //rotg, Givens rotation params calculation, docs are wrong on parameter types here. 
@@ -325,7 +324,7 @@ namespace cppmkl
   template <typename VECTOR_T, typename SCALAR_T>
   inline void cblas_scal(VECTOR_T& x, const SCALAR_T& a, const MKL_INT incX=1)
   {
-    cblas_scal(x.size()/incX, a, x.data(), incX);
+    cblas_scal(x.size()/incX, a, ptr_to_first(x), incX);
   }
   
   // swap: swap vectors
@@ -354,7 +353,7 @@ namespace cppmkl
   template<typename VECTOR_T>
   inline void cblas_swap(VECTOR_T& x, VECTOR_T& y, const MKL_INT incX=1, const MKL_INT incY=1)
   {
-    cblas_swap(x.size()/incX, x.data(), incX, y.data(), incY);
+    cblas_swap(x.size()/incX, ptr_to_first(x), incX, ptr_to_first(y), incY);
   }
 
   //iamax: find max element in vector
@@ -378,7 +377,7 @@ namespace cppmkl
   template<typename VECTOR_T>
   inline CBLAS_INDEX cblas_iamax(VECTOR_T& x, const MKL_INT incX=1)
   {
-    return cblas_iamax(x.size()/incX, x.data(), incX);
+    return cblas_iamax(x.size()/incX, ptr_to_first(x), incX);
   } 
   //iamin: find min element in vector
   inline CBLAS_INDEX cblas_iamin(const MKL_INT N, const float  *X, const MKL_INT incX)
@@ -401,7 +400,7 @@ namespace cppmkl
   template<typename VECTOR_T>
   inline CBLAS_INDEX cblas_iamin(VECTOR_T& x, const MKL_INT incX=1)
   {
-    return cblas_iamin(x.size()/incX, x.data(), incX);
+    return cblas_iamin(x.size()/incX, ptr_to_first(x), incX);
   } 
 
   inline double cblas_cabs1(const MKL_Complex16& z)
@@ -463,7 +462,7 @@ namespace cppmkl
     const MKL_INT M = A.size1();
     const MKL_INT N = A.size2();
     const MKL_INT lda = doTransA == false ? opA_col_count : opA_row_count;
-    cblas_gemv(order, TransA, M, N, alpha, A.data(), lda, x.data(), incX, beta, y.data(), incY); 
+    cblas_gemv(order, TransA, M, N, alpha, ptr_to_first(A), lda, ptr_to_first(x), incX, beta, ptr_to_first(y), incY); 
   }
   //ger rank 1 update of a general matrix
   //gerc rank 1 update of a conjugated general matrix
@@ -471,8 +470,7 @@ namespace cppmkl
 
   /** cppmkl wrapper for cblas_dgemm, BLAS level 3 matrix multiplication
    * MATRIX_T can be any row-major matrix type that has functions size1(), size2() 
-   * giving row count and column count respectively and data()
-   * which returns a pointer to the first data element
+   * giving row count and column count respectively 
    */
   inline void cblas_gemm(const  CBLAS_ORDER Order, const  CBLAS_TRANSPOSE TransA,
                  const  CBLAS_TRANSPOSE TransB, const MKL_INT M, const MKL_INT N,
@@ -537,8 +535,8 @@ namespace cppmkl
       assert(opA_col_count == opB_row_count);
       assert(C.size1() == opA_row_count);
       assert(C.size2() == opB_col_count);
-      // call the appropriate overloaded cblas_gemm function based on the type of X.data()
-      cblas_gemm(order, TransA, TransB, opA_row_count, opB_col_count, opA_col_count, alpha, A.data(), lda, B.data(), ldb, beta, C.data(), ldc);     
+      // call the appropriate overloaded cblas_gemm function based on the type of X
+      cblas_gemm(order, TransA, TransB, opA_row_count, opB_col_count, opA_col_count, alpha, ptr_to_first(A), lda, ptr_to_first(B), ldb, beta, ptr_to_first(C), ldc);     
     }
 
 }

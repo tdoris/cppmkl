@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cmath>
 
+#include <boost/numeric/ublas/matrix.hpp>
+#include "cppmkl/cppmkl_boostw.h"
 #include "cppmkl/cppmkl_cblas.h"
 #include "cppmkl/matrix.h"
 
@@ -60,3 +62,21 @@ int test_gemm()
   return 0; 
 }
 
+
+void test_gemm_boost()
+{
+  cout << __FUNCTION__ <<endl;
+  {
+    boost::numeric::ublas::matrix<float> A(2,2);
+    boost::numeric::ublas::matrix<float> B(2,2);
+    boost::numeric::ublas::matrix<float> C(2,2);
+    initm(A, "1.2 2.3; 3.4 4.5");
+    initm(B, "1.2 2.3; 3.4 4.5");
+    cppmkl::cblas_gemm(A, B, C);
+    assert(fabs(C(0,0) - 9.26 ) < 0.0001);   
+    assert(fabs(C(0,1) - 13.11 ) < 0.0001);   
+    assert(fabs(C(1,0) - 19.38 ) < 0.0001);   
+    assert(fabs(C(1,1) - 28.07 ) < 0.0001);   
+  }
+
+}

@@ -23,6 +23,8 @@ void test_gemv();
 void test_gemm();
 void test_vmul();
 void test_vml();
+void test_std_vector_vml();
+void test_gemm_boost();
 
 int main()
 {
@@ -49,5 +51,7 @@ int main()
   test_gemm();
   test_vmul();
   test_vml();
+  test_std_vector_vml();
+  test_gemm_boost();
   return 0;
 }

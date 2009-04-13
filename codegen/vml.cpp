@@ -6,7 +6,6 @@
 #include <cmath>
 #include <sstream>
 
-
 using namespace std;
 struct func
 {
@@ -114,11 +113,11 @@ private:
     cout <<"  {"<<endl;
     if(hasB)
     {
-      cout <<"    "<<wrapper_name<<"(a.size(), a.data(), b.data(), r.data());  "<<endl;
+      cout <<"    "<<wrapper_name<<"(a.size(), ptr_to_first(a), ptr_to_first(b), ptr_to_first(r));  "<<endl;
     }
     else
     {
-      cout <<"    "<<wrapper_name<<"(a.size(), a.data(), r.data());  "<<endl;
+      cout <<"    "<<wrapper_name<<"(a.size(), ptr_to_first(a), ptr_to_first(r));  "<<endl;
     }
     cout <<"  }"<<endl;
   }
@@ -165,7 +164,7 @@ void vabs()
   cout <<"  template <typename VECTOR_T>"<<endl;
   cout <<"  inline void vabs(const VECTOR_T& a, VECTOR_T& r)"<<endl;
   cout <<"  {"<<endl;
-  cout <<"    vabs(a.size(), a.data(), r.data());  "<<endl;
+  cout <<"    vabs(a.size(), ptr_to_first(a), ptr_to_first(r));  "<<endl;
   cout <<"  }"<<endl;
 }
 
@@ -191,7 +190,7 @@ void vpowx()
   cout <<"  template <typename SCALAR_T, typename VECTOR_T>"<<endl;
   cout <<"  inline void vpowx(const VECTOR_T& a, const SCALAR_T& b, VECTOR_T& r)"<<endl;
   cout <<"  {"<<endl;
-  cout <<"    vpowx(a.size(), a.data(), b, r.data());  "<<endl;
+  cout <<"    vpowx(a.size(), ptr_to_first(a), b, ptr_to_first(r));  "<<endl;
   cout <<"  }"<<endl;
 }
 
@@ -209,7 +208,7 @@ void vsincos()
   cout <<"  template <typename VECTOR_T>"<<endl;
   cout <<"  inline void vsincos(const VECTOR_T& a, VECTOR_T& y, VECTOR_T& z)"<<endl;
   cout <<"  {"<<endl;
-  cout <<"    vsincos(a.size(), a.data(), y.data(), z.data());  "<<endl;
+  cout <<"    vsincos(a.size(), ptr_to_first(a), ptr_to_first(y), ptr_to_first(z));  "<<endl;
   cout <<"  }"<<endl;
 }
 
@@ -227,7 +226,7 @@ void vCIS()
   cout <<"  template <typename VECTOR_T_REAL, typename VECTOR_T_COMPLEX>"<<endl;
   cout <<"  inline void vCIS(const VECTOR_T_REAL& a, VECTOR_T_COMPLEX& r)"<<endl;
   cout <<"  {"<<endl;
-  cout <<"    vCIS(a.size(), a.data(), r.data());  "<<endl;
+  cout <<"    vCIS(a.size(), ptr_to_first(a), ptr_to_first(r));  "<<endl;
   cout <<"  }"<<endl;
   
 }
@@ -245,7 +244,7 @@ void vmodf()
   cout <<"  template <typename VECTOR_T>"<<endl;
   cout <<"  inline void vmodf(const VECTOR_T& a, VECTOR_T& y, VECTOR_T& z)"<<endl;
   cout <<"  {"<<endl;
-  cout <<"    vmodf(a.size(), a.data(), y.data(), z.data());  "<<endl;
+  cout <<"    vmodf(a.size(), ptr_to_first(a), ptr_to_first(y), ptr_to_first(z));  "<<endl;
   cout <<"  }"<<endl;
 }
 vector<func> function;
