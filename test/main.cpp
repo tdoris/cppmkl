@@ -21,6 +21,7 @@ void test_iamin();
 void test_dcabs1();
 void test_gemv();
 void test_gemm();
+void test_vmul();
 int main()
 {
   matrix_construction();
@@ -44,5 +45,6 @@ int main()
   test_dcabs1();
   test_gemv();
   test_gemm();
+  test_vmul();
   return 0;
 }
