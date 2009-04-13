@@ -528,11 +528,12 @@ namespace cppmkl
       const size_t opA_row_count = doTransA == false ? A.size1() : A.size2();//rows of op(A)
       const size_t opB_col_count = doTransB == false ? B.size2() : B.size1();//cols of op(B) 
       const size_t opA_col_count = doTransA == false ? A.size2() : A.size1();//cols of op(A)
-      const size_t opB_row_count = doTransB == false ? B.size1() : B.size2(); //rows of op(B)
+      //const size_t opB_row_count = doTransB == false ? B.size1() : B.size2(); //rows of op(B)
       const MKL_INT lda = doTransA == false ? opA_col_count : opA_row_count;
       const MKL_INT ldb = doTransB == false ? opB_col_count : opA_col_count;
       const MKL_INT ldc = opB_col_count; 
-      assert(opA_col_count == opB_row_count);
+      //opB_row_count;
+      //assert(opA_col_count == opB_row_count);
       assert(C.size1() == opA_row_count);
       assert(C.size2() == opB_col_count);
       // call the appropriate overloaded cblas_gemm function based on the type of X
