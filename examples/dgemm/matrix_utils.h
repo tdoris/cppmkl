@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "cppmkl/matrix.h"
 void initm(cppmkl::matrix<double>& m, const char* s)
 {
   std::vector<double> data;

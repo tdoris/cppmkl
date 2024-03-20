@@ -35,7 +35,7 @@ void test_boost_bmark()
       }
     }
     double boost_start, boost_end, cppmkl_start, cppmkl_end, cpufreq;
-    cpufreq = getcpufrequency();
+    cpufreq = mkl_get_cpu_frequency();
     boost_start = dsecnd(); 
 
     C = boost::numeric::ublas::prod(A,B);
@@ -52,5 +52,6 @@ void test_boost_bmark()
     cout << "cppmkl start, end:"<<cppmkl_start<<","<<cppmkl_end<<endl;
     cout << "boost elapsed:"<< (boost_end - boost_start) / cpufreq <<endl;
     cout << "cppmkl elapsed:"<< (cppmkl_end - cppmkl_start) / cpufreq <<endl;
+    cout << "cppmkl speedup:" <<(boost_end - boost_start) /  (cppmkl_end - cppmkl_start) << endl; 
   }
 }

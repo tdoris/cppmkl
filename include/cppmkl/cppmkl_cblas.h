@@ -1,7 +1,9 @@
 #ifndef __CPPMKL_CBLAS_H__
 #define __CPPMKL_CBLAS_H__
 #include <assert.h>
-#include <mkl_cblas.h>
+#include <mkl.h>
+//#include <mkl_service.h>
+//#include <mkl_cblas.h>
 #include "cppmkl/cppmkl_type_utils.h"
 
 namespace cppmkl
