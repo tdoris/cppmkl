@@ -1,1 +1,3 @@
 C++ wrapper types and functions for the Intel MKL
+
+provides a 10x speedup over boost matrix operations
